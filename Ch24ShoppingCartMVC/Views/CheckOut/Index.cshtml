@@ -1,0 +1,49 @@
+﻿@using System.Configuration
+@model Ch24ShoppingCartMVC.Models.CartViewModel
+@using Microsoft.Ajax.Utilities
+@{
+    ViewBag.Title = "Index";
+   // Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal sum = 0m;
+}
+
+@section css {
+    <link href="~/Content/Cart.css" rel="stylesheet" />
+}
+<h2>Your CheckOut Cart</h2>
+@if (Model.Cart.Count == 0)
+{
+    <p>Nothing in your cart yet.</p>
+}
+else
+{
+    <select multiple="multiple">
+        @foreach (var item in Model.Cart)
+        {
+            <option>Name:@item.Name|Quantity:@item.Quantity at $@item.UnitPrice.ToString("0.00") |@((item.UnitPrice * item.Quantity).ToString("0.00"))</option>
+            @(sum = (decimal)(sum + (item.UnitPrice * item.Quantity)));
+        }
+    </select>
+    <hr /><br/>
+    <h4>Total Sum = $@sum.ToString("0.000")</h4> <br/>
+    @*<p>
+        
+    </p>*@
+    <h4>Shipping Address</h4>
+    @Html.TextBox("ShippingAddress", "Address Line 1")
+    @Html.TextBox("City", "City")
+    @Html.TextBox("State", "State")
+    <br />
+    <br />
+    <h4>Select Payment</h4>
+    using (Html.BeginForm())
+    {<text>
+        @Html.RadioButton("Payment", "true", true)MasterCard
+        @Html.RadioButton("Payment", "true", true)Visa
+@Html.RadioButton("Payment", "true", true)Paypal
+          </text>  }
+    <br />
+    <br />
+    <button>Pay Now</button>
+
+}
